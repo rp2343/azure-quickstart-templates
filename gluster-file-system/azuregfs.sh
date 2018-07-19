@@ -224,7 +224,7 @@ install_glusterfs_ubuntu() {
     then
         echo "adding gluster ppa"
         apt-get  -y install python-software-properties
-        apt-add-repository -y ppa:gluster/glusterfs-3.7
+        apt-add-repository -y ppa:gluster/glusterfs-3.12
         apt-get -y update
     fi
     
@@ -251,9 +251,8 @@ install_glusterfs_centos() {
     fi
     
     echo "installing gluster"
-    wget --no-cache http://download.gluster.org/pub/gluster/glusterfs/LATEST/EPEL.repo/glusterfs-epel.repo
-    mv glusterfs-epel.repo  /etc/yum.repos.d/
     yum -y update
+    yum -y install centos-release-gluster312.noarch
     yum -y install glusterfs-cli glusterfs-geo-replication glusterfs-fuse glusterfs-server glusterfs
 }
 
@@ -320,7 +319,7 @@ configure_gluster() {
     done
 
     sleep 60
-    gluster volume create ${VOLUMENAME} rep 2 transport tcp ${allNodes} 2>> /tmp/error
+    gluster volume create ${VOLUMENAME} rep 2 transport tcp ${allNodes} force 2>> /tmp/error
     gluster volume info 2>> /tmp/error
     gluster volume start ${VOLUMENAME} 2>> /tmp/error
 }
